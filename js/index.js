@@ -1,0 +1,132 @@
+function shopWindow(value){
+    this.getEle=document.getElementById(value);
+}
+shopWindow.prototype={
+    default:{
+        "width":"1226px",
+        "height":"460px",
+        "position":"relative",
+        "margin":"100px auto",
+    },
+    init:function(arr,showList){
+        this.drawImg(arr);
+        this.drawWindow();
+        this.drawButton();
+        index=0;
+        time=setInterval(viewShow.autoPlay,2000);
+        this.drawDiv(showList);
+    },
+    drawDiv:function(showList){
+        console.log(showList);
+        this.getEle.innerHTML+="<div class=\"shopList\"><ul class='ulList'></ul></div>"
+        var shopList=this.getEle.getElementsByClassName("ulList")[0];
+
+        for(var i=0;i<showList.length;i++){
+            shopList.innerHTML+="<li class=\"liList\">"+showList[i]+"<i class=\"iconfont icon-gengduo icontext\"></i>"+"</li>";
+        }
+        var childUl=document.getElementsByClassName("liList");
+        console.log(childUl.length);
+        for(var j=0;j<childUl.length;j++) {
+            childUl[j].innerHTML += "<ul class=\"child-ul\"></ul>";
+        }
+        for(var k=0;k<childUl.length;k++){
+            (function (k) {
+
+                childUl[k].onmouseover = function () {
+                    var ulform = document.getElementsByClassName("child-ul");
+                    console.log(ulform);
+                    ulform[k].style.display = "block";
+                    console.log("我是第"+k+"个");
+                }
+                childUl[k].onmouseout = function () {
+                    var ulform = document.getElementsByClassName("child-ul");
+                    console.log(ulform);
+                    ulform[k].style.display = "none";
+                    console.log("消失第"+k+"个");
+                }
+            })(k);
+        }
+    },
+    drawImg:function(obj){
+        for(var i=0;i<obj.length;i++){
+            this.getEle.innerHTML+="<img src=image/"+obj[i]+">";
+
+        }
+        this.getEle.getImg=document.getElementsByTagName("img");
+    },
+    drawWindow:function (options) {
+        for (var k in options)
+            this.default[k] = options[k];
+        this.getEle.style.width = this.default.width;
+        this.getEle.style.height = this.default.height;
+        this.getEle.style.position = this.default.position;
+        this.getEle.style.margin = this.default.margin;
+        this.getEle.style.border = this.default.border;
+        for (var i = 0; i < this.getEle.getImg.length; i++) {
+            this.getEle.getImg[i].style.height = this.default.height;
+            this.getEle.getImg[i].style.width = this.default.width;
+            this.getEle.getImg[i].style.position = "absolute";
+            this.getEle.getImg[i].style.left = "0px";
+            this.getEle.getImg[i].style.top = "0px";
+            this.getEle.getImg[i].style.opacity = "0";
+        };
+        this.getEle.getImg[0].style.opacity = "1";
+        return this;
+    },
+    drawButton:function () {
+       this.getEle.innerHTML+="<a href='javascript:'><i class=\"iconfont icon-fanhui iconleft\"></i></a>"+"<a href='javascript:'><i class=\"iconfont icon-gengduo iconright\"></i></a>";
+       var butt=this.getEle.getElementsByTagName("a");
+        butt[0].className="leftButton";
+        butt[1].className="rightButton";
+        butt[0].onclick=function () {
+        return this;
+        }
+    },
+    autoPlay:function () {
+        viewShow.getEle.getImg[index].style.opacity = "0";
+        viewShow.getEle.getImg[index].style.transition = "opacity 0.5s";
+        index++;
+        if(index==viewShow.getEle.getImg.length){
+            index=0;
+        }
+        viewShow.getEle.getImg[index].style.opacity = "1";
+        viewShow.getEle.getImg[index].style.transition = "opacity 0.5s"
+        console.log(new Date());
+        console.log(index);
+        viewShow.getEle.onmouseover=function () {
+            console.log("你好");
+            clearInterval(time);
+            time=null;
+        }
+        viewShow.getEle.onmouseout=function () {
+            time=setInterval(viewShow.autoPlay,2000);
+        }
+        var butt=viewShow.getEle.getElementsByTagName("a");
+        butt[0].onclick=function () {
+            viewShow.getEle.getImg[index].style.opacity = "0";
+            viewShow.getEle.getImg[index].style.transition = "opacity 0.3s";
+            index--;
+            if(index==-1){
+                index=viewShow.getEle.getImg.length-1;
+            }
+            viewShow.getEle.getImg[index].style.opacity = "1";
+            viewShow.getEle.getImg[index].style.transition = "opacity 1s"
+        }
+        butt[1].onclick=function () {
+            viewShow.getEle.getImg[index].style.opacity = "0";
+            viewShow.getEle.getImg[index].style.transition = "opacity 0.5s";
+            index++;
+            if (index == viewShow.getEle.getImg.length) {
+                index = 0;
+            }
+            viewShow.getEle.getImg[index].style.opacity = "1";
+            viewShow.getEle.getImg[index].style.transition = "opacity 0.5s"
+        }
+    },
+}
+    var viewShow=new shopWindow("divbox");
+    viewShow.init(["shop1.jpg","shop2.jpg","shop3.jpg","shop4.jpg","shop5.jpg"],["手机&nbsp&nbsp电话卡","电视&nbsp&nbsp盒子","笔记本&nbsp&nbsp平板","家电&nbsp&nbsp插线板","智能&nbsp&nbsp路由器"]);
+    console.log(viewShow);
+    // viewShow.drawImg(["shop1.jpg","shop2.jpg","shop3.jpg","shop4.jpg","shop5.jpg"]);
+    // viewShow.drawWindow().drawButton();
+    // var index= 0;
